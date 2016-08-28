@@ -71,12 +71,12 @@ public class CatapultController : MonoBehaviour {
             //Debug.Log(anim["Arm|Shoot"].length * 1.4f);
             yield return new WaitForSeconds(anim["Arm|Shoot"].length *1.4f);
 
+            fired = true;
             ammoRigidBody.useGravity = true;
             ammoRigidBody.AddForce(fireDirection * thrust);
             currentAmmo.tag = "Rock";
             currentAmmo.AddComponent<SelfDestruct>();
             currentAmmo.GetComponent<SelfDestruct>().setDelay(lifetimeAfterFire);
-            fired = true;
         }
     }
 
@@ -87,7 +87,7 @@ public class CatapultController : MonoBehaviour {
         {
             anim.Play("Arm|Reload");
             //Debug.Log(anim["Arm|Reload"].length * 1.4f);
-            yield return new WaitForSeconds(anim["Arm|Reload"].length);
+            yield return new WaitForSeconds(anim["Arm|Reload"].length * 1.4f);
 
             currentAmmo = GameObject.Instantiate(projectilePrefab);
             currentAmmo.transform.position = ammoSlot.transform.position;
