@@ -24,7 +24,7 @@ public class SelfDestruct : MonoBehaviour {
     IEnumerator WaitAndDestroy()
     {
         yield return new WaitForSeconds(destroyAfter);
-        //Debug.Log("Destroy");
+        Debug.Log("Destroy");
         Destroy(this.gameObject);
     }
 
