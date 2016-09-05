@@ -42,12 +42,18 @@ public class CatapultController : MonoBehaviour {
 
         if (Input.GetKeyUp(KeyCode.Space))
         {
-            StartCoroutine(shoot());
+            if (fired == false && anim.isPlaying == false)
+            {
+                StartCoroutine(shoot());
+            }
         }
 
         if (Input.GetKeyUp(KeyCode.R))
         {
-            StartCoroutine(reloadArm());
+            if (fired == true && anim.isPlaying == false)
+            {
+                StartCoroutine(reloadArm());
+            }
         }
 
         if (Input.GetKey(KeyCode.A))
@@ -65,36 +71,29 @@ public class CatapultController : MonoBehaviour {
 
     IEnumerator shoot()
     {
-        if (fired == false)
-        {
-            anim.Play("Arm|Shoot");
-            //Debug.Log(anim["Arm|Shoot"].length * 1.4f);
-            yield return new WaitForSeconds(anim["Arm|Shoot"].length *1.4f);
+        anim.Play("Arm|Shoot");
+        //Debug.Log(anim["Arm|Shoot"].length * 1.4f);
+        yield return new WaitForSeconds(anim["Arm|Shoot"].length *1.4f);
 
-            fired = true;
-            ammoRigidBody.useGravity = true;
-            ammoRigidBody.AddForce(fireDirection * thrust);
-            currentAmmo.tag = "Rock";
-            currentAmmo.AddComponent<SelfDestruct>();
-            currentAmmo.GetComponent<SelfDestruct>().setDelay(lifetimeAfterFire);
-        }
+        fired = true;
+        ammoRigidBody.useGravity = true;
+        ammoRigidBody.AddForce(fireDirection * thrust);
+        currentAmmo.tag = "Rock";
+        currentAmmo.AddComponent<SelfDestruct>();
+        currentAmmo.GetComponent<SelfDestruct>().setDelay(lifetimeAfterFire);
     }
 
     IEnumerator reloadArm()
     {
+        anim.Play("Arm|Reload");
+        //Debug.Log(anim["Arm|Reload"].length * 1.4f);
+        yield return new WaitForSeconds(anim["Arm|Reload"].length * 1.4f);
 
-        if (fired == true)
-        {
-            anim.Play("Arm|Reload");
-            //Debug.Log(anim["Arm|Reload"].length * 1.4f);
-            yield return new WaitForSeconds(anim["Arm|Reload"].length * 1.4f);
-
-            currentAmmo = GameObject.Instantiate(projectilePrefab);
-            currentAmmo.transform.position = ammoSlot.transform.position;
-            ammoRigidBody = currentAmmo.GetComponent<Rigidbody>();
-            ammoRigidBody.useGravity = false;
-            fired = false;
-        }
+        currentAmmo = GameObject.Instantiate(projectilePrefab);
+        currentAmmo.transform.position = ammoSlot.transform.position;
+        ammoRigidBody = currentAmmo.GetComponent<Rigidbody>();
+        ammoRigidBody.useGravity = false;
+        fired = false;
     }
 
     private void updateAmmoLoc()
